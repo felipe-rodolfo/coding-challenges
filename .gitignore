@@ -36,4 +36,4 @@ tmp/
 Thumbs.db
 
 # Optional: Docker volumes (if using docker-compose)
-# postgres_data/
+postgres_data/
