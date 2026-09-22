@@ -1,16 +1,22 @@
 {
  "compilerOptions": {
-    "module": "esnext",  
+    "module": "preserve",  
     "target": "es2020",                              
     "rootDir": "./src",
     "outDir": "./dist",  
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "types": [
+     "node"
+    ]
   },
   "ts-node": {
     "esm": true,
     "experimentalEsm": true
-  }
+  },
+  "include": ["src/**/*.ts"]
 }
