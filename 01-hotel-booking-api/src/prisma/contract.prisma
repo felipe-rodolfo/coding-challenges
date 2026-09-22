@@ -1,0 +1,29 @@
+// use prisma-8
+
+enum UserType {
+  regular
+  premium
+}
+
+enum DayType {
+  weekday
+  weekend
+}
+
+model Hotel {
+  id    String @id @default(uuid())
+  name  String
+  stars Int
+  rates Rate[]
+}
+
+model Rate {
+  id       String @id @default(uuid())
+  hotel    Hotel @relation(fields: [hotelId], references: [id])
+  hotelId  String
+  userType UserType
+  dayType  DayType
+  price    Int
+
+  @@unique([hotelId, userType, dayType])
+}

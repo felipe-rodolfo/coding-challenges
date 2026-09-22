@@ -1,0 +1,404 @@
+{
+  "schemaVersion": "1",
+  "targetFamily": "sql",
+  "target": "postgres",
+  "profileHash": "3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2",
+  "roots": {
+    "hotel": {
+      "model": "Hotel",
+      "namespace": "public"
+    },
+    "rate": {
+      "model": "Rate",
+      "namespace": "public"
+    }
+  },
+  "domain": {
+    "namespaces": {
+      "public": {
+        "enum": {
+          "DayType": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "weekday",
+                "value": "weekday"
+              },
+              {
+                "name": "weekend",
+                "value": "weekend"
+              }
+            ]
+          },
+          "UserType": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "regular",
+                "value": "regular"
+              },
+              {
+                "name": "premium",
+                "value": "premium"
+              }
+            ]
+          }
+        },
+        "models": {
+          "Hotel": {
+            "fields": {
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "name": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "stars": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "rates": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "hotelId"
+                  ]
+                },
+                "to": {
+                  "model": "Rate",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "id": {
+                  "column": "id"
+                },
+                "name": {
+                  "column": "name"
+                },
+                "stars": {
+                  "column": "stars"
+                }
+              },
+              "namespaceId": "public",
+              "table": "hotel"
+            }
+          },
+          "Rate": {
+            "fields": {
+              "dayType": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "DayType",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              },
+              "hotelId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "price": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "userType": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "UserType",
+                  "namespaceId": "public",
+                  "plane": "domain"
+                }
+              }
+            },
+            "relations": {
+              "hotel": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "hotelId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Hotel",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "dayType": {
+                  "column": "dayType"
+                },
+                "hotelId": {
+                  "column": "hotelId"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "price": {
+                  "column": "price"
+                },
+                "userType": {
+                  "column": "userType"
+                }
+              },
+              "namespaceId": "public",
+              "table": "rate"
+            }
+          }
+        }
+      }
+    }
+  },
+  "storage": {
+    "namespaces": {
+      "public": {
+        "entries": {
+          "table": {
+            "hotel": {
+              "columns": {
+                "id": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "name": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "stars": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [],
+              "indexes": [],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": []
+            },
+            "rate": {
+              "checks": [
+                {
+                  "expression": "\"dayType\" IN ('weekday', 'weekend')",
+                  "name": "rate_dayType_check_cc11da97",
+                  "prefix": "rate_dayType_check"
+                },
+                {
+                  "expression": "\"userType\" IN ('regular', 'premium')",
+                  "name": "rate_userType_check_2ef65764",
+                  "prefix": "rate_userType_check"
+                }
+              ],
+              "columns": {
+                "dayType": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "DayType",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                },
+                "hotelId": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "price": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "userType": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "UserType",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
+                }
+              },
+              "foreignKeys": [
+                {
+                  "source": {
+                    "columns": [
+                      "hotelId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "rate"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "hotel"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "hotelId"
+                  ],
+                  "name": "rate_hotelId_idx_462a16a4",
+                  "prefix": "rate_hotelId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "hotelId",
+                    "userType",
+                    "dayType"
+                  ]
+                }
+              ]
+            }
+          },
+          "valueSet": {
+            "DayType": {
+              "kind": "valueSet",
+              "values": [
+                "weekday",
+                "weekend"
+              ]
+            },
+            "UserType": {
+              "kind": "valueSet",
+              "values": [
+                "regular",
+                "premium"
+              ]
+            }
+          }
+        },
+        "id": "public",
+        "kind": "postgres-schema"
+      }
+    },
+    "storageHash": "3f77f1c37af23d1b72eb03c4ae02399d0a6706ebb08cb73e3138e1a57e475f89"
+  },
+  "execution": {
+    "executionHash": "d82e65c5364d67ccba1127726ff9313440a064bc4f3b6099ef6e78076c95287c",
+    "mutations": {
+      "defaults": [
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id",
+            "namespace": "public",
+            "table": "hotel"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id",
+            "namespace": "public",
+            "table": "rate"
+          }
+        }
+      ]
+    }
+  },
+  "capabilities": {
+    "postgres": {
+      "distinctOn": true,
+      "jsonAgg": true,
+      "lateral": true,
+      "limit": true,
+      "orderBy": true,
+      "returning": true
+    },
+    "sql": {
+      "checkConstraint": true,
+      "defaultInInsert": true,
+      "enums": true,
+      "lateral": true,
+      "returning": true,
+      "scalarList": true
+    }
+  },
+  "extensions": {},
+  "meta": {},
+  "_generated": {
+    "warning": "⚠️  GENERATED FILE - DO NOT EDIT",
+    "message": "This file is automatically generated by \"prisma contract emit\".",
+    "regenerate": "To regenerate, run: prisma contract emit"
+  }
+}
